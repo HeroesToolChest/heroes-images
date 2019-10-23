@@ -3,9 +3,8 @@ This repo contain the Heroes of the Storm image files that are extracted from [H
 
 All static images are in png format while the animated images are in gif format. Due to the quality limitations of gifs, the texture files used for the creation of the gifs are also extracted in png format. Information about creating animations can be found in the Heroes Data Parser [wiki](https://github.com/HeroesToolChest/HeroesDataParser/wiki/Animated-Images)
 
-  
 ## Heroes Data Parser Extraction
-The following command was used:
+The following command was used (same for [Heroes Data](https://github.com/HeroesToolChest/heroes-data)):
 ```
 'Path/To/Game' --extract-data all --extract-images all --localization all --localized-text
 ```
@@ -13,3 +12,4 @@ Then the following command was used to convert the gamestring files to json:
 ```
 localized-json 'Path/To/gamestring-directory'
 ```
+
