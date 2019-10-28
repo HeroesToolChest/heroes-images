@@ -8,3 +8,11 @@ Or the following command if data and gamestrings are being extracted as well for
 ```
 'Path/To/Game' --extract-data all --extract-images all --localization all --localized-text
 ```
+
+The `.hdp.json` is **required** with the pull request with the following format
+```
+{
+  "hdp": "x.x.x",
+}
+```
+`x.x.x` is the hdp version that was used.
