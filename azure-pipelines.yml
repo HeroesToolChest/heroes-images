@@ -83,21 +83,21 @@ steps:
   displayName: Publish Artifact - All - Zip
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)/heroes-images-$(Build.BuildNumber)_all.zip'
-    ArtifactName: 'heroes-data-$(Build.BuildNumber)_all'
+    ArtifactName: 'heroes-images-$(Build.BuildNumber)_all'
     publishLocation: 'Container'
 
 - task: PublishBuildArtifacts@1
   displayName: Publish Artifact - All - Tar
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)/heroes-images-$(Build.BuildNumber)_all.tar.gz'
-    ArtifactName: 'heroes-data-$(Build.BuildNumber)_all'
+    ArtifactName: 'heroes-images-$(Build.BuildNumber)_all'
     publishLocation: 'Container'
 
 - task: PublishBuildArtifacts@1
   displayName: Publish Artifact - New - Zip
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)/heroes-images-$(Build.BuildNumber)_new.zip'
-    ArtifactName: 'heroes-data-$(Build.BuildNumber)_new'
+    ArtifactName: 'heroes-images-$(Build.BuildNumber)_new'
     publishLocation: 'Container'
   condition: and(succeeded(), eq('variables.partial_files_path_exists', 'True'))
 
@@ -105,6 +105,6 @@ steps:
   displayName: Publish Artifact - New - Tar
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)/heroes-images-$(Build.BuildNumber)_new.tar.gz'
-    ArtifactName: 'heroes-data-$(Build.BuildNumber)_new'
+    ArtifactName: 'heroes-images-$(Build.BuildNumber)_new'
     publishLocation: 'Container'
   condition: and(succeeded(), eq('variables.partial_files_path_exists', 'True'))
