@@ -15,7 +15,9 @@ Releases will have have up to two zip files. A `_all` and sometimes a `_new`.
 The `_all` will contain all the images.  
 The `_new` will contain only the new or modified file(s) from the last release.
 
-Release will only happen when there are new or modified images.
+Releases will only happen when there are new or modified images.
+
+The release version is simply the build version from Azure Pipelines `$(Date:yyyyMMdd).$(Rev:r)`.
 
 ## Heroes Data Parser Extraction
 The following command was used (same for [Heroes Data](https://github.com/HeroesToolChest/heroes-data)):
