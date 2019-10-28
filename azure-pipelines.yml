@@ -7,6 +7,8 @@ variables:
 pool:
   vmImage: 'ubuntu-latest'
 
+pr: none
+
 steps:
 - task: DownloadGitHubRelease@0
   displayName: Download Latest Release
