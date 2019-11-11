@@ -7,106 +7,117 @@ variables:
 pool:
   vmImage: 'ubuntu-latest'
 
-pr: none
+jobs:
+  - job: Validate
+    steps:
+    - pwsh: |
+        $result = ./ps1/encoding-check.ps1 -Path $env:SOURCE_FOLDER
+        if ($result -eq 1)
+        {
+            exit 1
+        }
 
-steps:
-- task: DownloadGitHubRelease@0
-  displayName: Download Latest Release
-  inputs:
-    connection: 'koliva8245-OAuth'
-    userRepository: 'HeroesToolChest/heroes-images'
-    defaultVersionType: 'latest'
-    itemPattern: 'heroes-images-*_all.zip'
-    downloadPath: '$(System.ArtifactsDirectory)'
+  - job: Files
+    dependsOn: Validate
+    condition: and(succeeded('Validate'), ne(variables['build.Reason'], 'PullRequest'))
+    steps:
+    - task: DownloadGitHubRelease@0
+      displayName: Download Latest Release
+      inputs:
+        connection: 'koliva8245-OAuth'
+        userRepository: 'HeroesToolChest/heroes-images'
+        defaultVersionType: 'latest'
+        itemPattern: 'heroes-images-*_all.zip'
+        downloadPath: '$(System.ArtifactsDirectory)'
 
-- task: ExtractFiles@1
-  displayName: Extract Latest Release
-  inputs:
-    archiveFilePatterns: '$(System.ArtifactsDirectory)/heroes-images-*_all.zip'
-    destinationFolder: '$(latest_release_files)'
-    cleanDestinationFolder: true
+    - task: ExtractFiles@1
+      displayName: Extract Latest Release
+      inputs:
+        archiveFilePatterns: '$(System.ArtifactsDirectory)/heroes-images-*_all.zip'
+        destinationFolder: '$(latest_release_files)'
+        cleanDestinationFolder: true
 
-- pwsh: |
-    Write-Host "Old path directories:"
-    Get-ChildItem -Path $env:LATEST_RELEASE_FILES -Directory -Name
-    Write-Host "New path directories:"
-    Get-ChildItem -Path $env:SOURCE_FOLDER -Directory -Name
+    - pwsh: |
+        Write-Host "Old path directories:"
+        Get-ChildItem -Path $env:LATEST_RELEASE_FILES -Directory -Name
+        Write-Host "New path directories:"
+        Get-ChildItem -Path $env:SOURCE_FOLDER -Directory -Name
 
-    if (Write-Host (Get-ChildItem $env:LATEST_RELEASE_FILES | Measure-Object).Count -eq 0)
-    {
-       Write-Host "##vso[task.LogIssue type=error;]No files in old path"
-       exit 1
-    }
+        if (Write-Host (Get-ChildItem $env:LATEST_RELEASE_FILES | Measure-Object).Count -eq 0)
+        {
+          Write-Host "##vso[task.LogIssue type=error;]No files in old path"
+          exit 1
+        }
 
-    ./ps1/get-diff-files.ps1 -OldPath $env:LATEST_RELEASE_FILES -NewPath $env:SOURCE_FOLDER -PartialPath $env:PARTIAL_FILES
+        ./ps1/get-diff-files.ps1 -OldPath $env:LATEST_RELEASE_FILES -NewPath $env:SOURCE_FOLDER -PartialPath $env:PARTIAL_FILES
 
-    $env:PARTIAL_FILES_PATH_EXISTS = Test-Path $env:PARTIAL_FILES -PathType Container
-  displayName: Get New Files
+        $env:PARTIAL_FILES_PATH_EXISTS = Test-Path $env:PARTIAL_FILES -PathType Container
+      displayName: Get New Files
 
-- task: ArchiveFiles@2
-  displayName: Archive Files - All - Zip
-  inputs:
-    rootFolderOrFile: '$(source_folder)'
-    includeRootFolder: false
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/heroes-images-$(Build.BuildNumber)_all.zip'
-    replaceExistingArchive: true
+    - task: ArchiveFiles@2
+      displayName: Archive Files - All - Zip
+      inputs:
+        rootFolderOrFile: '$(source_folder)'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/heroes-images-$(Build.BuildNumber)_all.zip'
+        replaceExistingArchive: true
 
-- task: ArchiveFiles@2
-  displayName: Archive Files - All - Tar
-  inputs:
-    rootFolderOrFile: '$(source_folder)'
-    includeRootFolder: false
-    archiveType: 'tar'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/heroes-images-$(Build.BuildNumber)_all.tar.gz'
-    replaceExistingArchive: true
+    - task: ArchiveFiles@2
+      displayName: Archive Files - All - Tar
+      inputs:
+        rootFolderOrFile: '$(source_folder)'
+        includeRootFolder: false
+        archiveType: 'tar'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/heroes-images-$(Build.BuildNumber)_all.tar.gz'
+        replaceExistingArchive: true
 
-- task: ArchiveFiles@2
-  displayName: Archive Files - New - Zip
-  inputs:
-    rootFolderOrFile: '$(partial_files)'
-    includeRootFolder: false
-    archiveType: 'zip'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/heroes-images-$(Build.BuildNumber)_new.zip'
-    replaceExistingArchive: true
-  condition: and(succeeded(), eq('variables.partial_files_path_exists', 'True'))
+    - task: ArchiveFiles@2
+      displayName: Archive Files - New - Zip
+      inputs:
+        rootFolderOrFile: '$(partial_files)'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/heroes-images-$(Build.BuildNumber)_new.zip'
+        replaceExistingArchive: true
+      condition: and(succeeded(), eq('variables.partial_files_path_exists', 'True'))
 
-- task: ArchiveFiles@2
-  displayName: Archive Files - New - Tar
-  inputs:
-    rootFolderOrFile: '$(partial_files)'
-    includeRootFolder: false
-    archiveType: 'tar'
-    archiveFile: '$(Build.ArtifactStagingDirectory)/heroes-images-$(Build.BuildNumber)_new.tar.gz'
-    replaceExistingArchive: true
-  condition: and(succeeded(), eq('variables.partial_files_path_exists', 'True'))
+    - task: ArchiveFiles@2
+      displayName: Archive Files - New - Tar
+      inputs:
+        rootFolderOrFile: '$(partial_files)'
+        includeRootFolder: false
+        archiveType: 'tar'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/heroes-images-$(Build.BuildNumber)_new.tar.gz'
+        replaceExistingArchive: true
+      condition: and(succeeded(), eq('variables.partial_files_path_exists', 'True'))
 
-- task: PublishBuildArtifacts@1
-  displayName: Publish Artifact - All - Zip
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/heroes-images-$(Build.BuildNumber)_all.zip'
-    ArtifactName: 'heroes-images-$(Build.BuildNumber)_all'
-    publishLocation: 'Container'
+    - task: PublishBuildArtifacts@1
+      displayName: Publish Artifact - All - Zip
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/heroes-images-$(Build.BuildNumber)_all.zip'
+        ArtifactName: 'heroes-images-$(Build.BuildNumber)_all'
+        publishLocation: 'Container'
 
-- task: PublishBuildArtifacts@1
-  displayName: Publish Artifact - All - Tar
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/heroes-images-$(Build.BuildNumber)_all.tar.gz'
-    ArtifactName: 'heroes-images-$(Build.BuildNumber)_all'
-    publishLocation: 'Container'
+    - task: PublishBuildArtifacts@1
+      displayName: Publish Artifact - All - Tar
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/heroes-images-$(Build.BuildNumber)_all.tar.gz'
+        ArtifactName: 'heroes-images-$(Build.BuildNumber)_all'
+        publishLocation: 'Container'
 
-- task: PublishBuildArtifacts@1
-  displayName: Publish Artifact - New - Zip
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/heroes-images-$(Build.BuildNumber)_new.zip'
-    ArtifactName: 'heroes-images-$(Build.BuildNumber)_new'
-    publishLocation: 'Container'
-  condition: and(succeeded(), eq('variables.partial_files_path_exists', 'True'))
+    - task: PublishBuildArtifacts@1
+      displayName: Publish Artifact - New - Zip
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/heroes-images-$(Build.BuildNumber)_new.zip'
+        ArtifactName: 'heroes-images-$(Build.BuildNumber)_new'
+        publishLocation: 'Container'
+      condition: and(succeeded(), eq('variables.partial_files_path_exists', 'True'))
 
-- task: PublishBuildArtifacts@1
-  displayName: Publish Artifact - New - Tar
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/heroes-images-$(Build.BuildNumber)_new.tar.gz'
-    ArtifactName: 'heroes-images-$(Build.BuildNumber)_new'
-    publishLocation: 'Container'
-  condition: and(succeeded(), eq('variables.partial_files_path_exists', 'True'))
+    - task: PublishBuildArtifacts@1
+      displayName: Publish Artifact - New - Tar
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/heroes-images-$(Build.BuildNumber)_new.tar.gz'
+        ArtifactName: 'heroes-images-$(Build.BuildNumber)_new'
+        publishLocation: 'Container'
+      condition: and(succeeded(), eq('variables.partial_files_path_exists', 'True'))
