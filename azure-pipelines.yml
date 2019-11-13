@@ -16,8 +16,9 @@ jobs:
         {
             exit 1
         }
+      displayName: Validate json encoding
 
-  - job: Files
+  - job: GetFiles
     dependsOn: Validate
     condition: and(succeeded('Validate'), ne(variables['build.Reason'], 'PullRequest'))
     steps:
