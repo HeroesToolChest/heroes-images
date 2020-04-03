@@ -1,7 +1,7 @@
 variables:
   source_folder: heroesimages/
-  latest_release_files: /latest_release
-  partial_files: /partial_files
+  latest_release_files: ./latest_release
+  partial_files: ./partial_files
 
 pool:
   vmImage: 'ubuntu-latest'
