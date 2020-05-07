@@ -29,3 +29,5 @@ Then the following command was used to convert the gamestring files to json:
 localized-json 'Path/To/gamestring-directory'
 ```
 
+For reward portraits extraction was done through the portrait commands ([wiki](https://github.com/HeroesToolChest/HeroesDataParser/wiki/Portrait-Icon-Extraction))
+
