@@ -10,7 +10,7 @@ All static images are in png format while the animated images are in gif format.
 The heroesimages directory also contain a `.hdp.json` file which contains a `hdp` property that specifies the version of Heroes Data Parser that was used to extract the images.
 
 ## Releases
-Releases will have have up to two zip files. A `_all` and sometimes a `_new`.
+Releases will have have up to two zip files. A `_all` and a `_new`.
 
 The `_all` will contain all the images.  
 The `_new` will contain only the new or modified file(s) from the last release.
