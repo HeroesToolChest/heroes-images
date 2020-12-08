@@ -1,0 +1,19 @@
+{
+	"name": "heroestoolchest/heroes-images",
+	"description": "Heroes of the Storm image files",
+	"keywords": [
+		"heroes",
+		"hots",
+		"blizzard",
+		"images"
+	],
+	"homepage": "https://github.com/HeroesToolChest/heroes-images",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Kevin Oliva",
+			"role": "Developer"
+		}
+	]
+}
+
