@@ -5,9 +5,11 @@ This repository contains the Heroes of the Storm image files extracted with [Her
 
 This repository contains all the images throughout every patch and as such the images are not specific to any patch.
 
-Static images are in `png` format while the animated images are in `apng` format.
+Starting with commit [e0b40fe](https://github.com/HeroesToolChest/heroes-images/commit/e0b40fe716c724d51c64adfee6a493e12c1c39be), all the images are extracted from `2.55.16.97039` and later (using HDP v5).
 
-For images that were extracted from HDP `v4` and earlier, see the [hdp4-images branch](https://github.com/HeroesToolChest/heroes-images/tree/hdp4-images).
+For images that were extracted earlier (using HDP v4), see the [hdp4-images branch](https://github.com/HeroesToolChest/heroes-images/tree/hdp4-images).
+
+Static images are in `png` format while the animated images are in `apng` format.
 
 ## Releases
 Each release contains only the new or modified images for a specific version.
