@@ -23,7 +23,6 @@ To extract the reward portraits, the following commands were used:
 [portrait info](https://github.com/HeroesToolChest/HeroesDataParser#portrait-info)  
 [portrait battlenet-cache](https://github.com/HeroesToolChest/HeroesDataParser#portrait-battlenet-cache)  
 [portrait extract](https://github.com/HeroesToolChest/HeroesDataParser#portrait-extract)  
-[portrait extract-auto](https://github.com/HeroesToolChest/HeroesDataParser/tree/develop-v5#portrait-extract-auto)
+[portrait extract-auto](https://github.com/HeroesToolChest/HeroesDataParser#portrait-extract-auto)
 
 See [Reward Portrait Extraction](https://github.com/HeroesToolChest/HeroesDataParser/wiki/Reward-Portrait-Extraction) for more information.
-
